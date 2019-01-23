@@ -8,7 +8,6 @@
  * @param {string} state
  */
 function createCard(imgUrl, nameTag, fullName, email, city, state) {
-    const gallery = $('#gallery');
     const cardDiv = $('<div class="card"></div>');
     const imgContainer = $('<div class="card-img-container"></div>');
     const infoContainer = $('<div class="card-info-container"></div>');
@@ -17,7 +16,7 @@ function createCard(imgUrl, nameTag, fullName, email, city, state) {
     const emailP = $(`<p class="card-text">${email}</p>`);
     const locationP = $(`<p class="card-text cap">${city}, ${state}</p>`);
 
-    gallery.append(cardDiv);
+    $('#gallery').append(cardDiv);
     cardDiv.append(imgContainer).append(infoContainer);
     imgContainer.append(img);
     infoContainer.append(h3).append(emailP).append(locationP);
@@ -65,6 +64,7 @@ function createModal(imgUrl, nameTag, fullName, email, phone, street, city, stat
 
     // close the window
     x.click(() => container.hide());
+    $(document).keydown(e => {if (e.key === 'Escape') container.hide()});
 }
 
 /**
@@ -74,15 +74,13 @@ function createModal(imgUrl, nameTag, fullName, email, phone, street, city, stat
 function generator(userData) {
     const users = userData.results;
     users.forEach(user => {
-        console.log(user.cell);
-
         const img = user.picture.large;
         const firstName = user.name.first;
         const lastName = user.name.last;
         const nameTag = `${firstName}-${lastName}`;
         const fullName = `${firstName} ${lastName}`;
         const email = user.email;
-        const phone = user.cell;
+        const phone = formatPhone(user.cell);
         const street = user.location.street;
         const city = user.location.city;
         const state = abbrState(user.location.state);
@@ -112,6 +110,11 @@ function abbrState(stateName) {
     return abbr;
 }
 
+/**
+ * Transforms a raw date string to a formatted date string
+ * @param {string} date 
+ * @returns {string} formatted date
+ */
 function formatDate(date) {
     const newDate = new Date(date);
     const month = newDate.getMonth() + 1;
@@ -121,6 +124,11 @@ function formatDate(date) {
     return `${month}/${day}/${year}`;
 }
 
+function formatPhone(phone) {
+    const regex = /^\(?(\d{3})\)?-(\d{3})-(\d{4})$/;
+    const newPhone = phone.replace(regex, '($1) $2-$3');
+    return newPhone;
+}
+
 // get data
 $.getJSON('https://randomuser.me/api/?exc=login,registered,nat,gender,phone&nat=us,ca&results=12', generator);
-// generate a card for each user
