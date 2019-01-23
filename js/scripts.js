@@ -4,9 +4,10 @@
  * @param {string} nameTag 
  * @param {string} fullName 
  * @param {string} email 
- * @param {string} cityState 
+ * @param {string} city
+ * @param {string} state
  */
-function createCard(imgUrl, nameTag, fullName, email, cityState) {
+function createCard(imgUrl, nameTag, fullName, email, city, state) {
     const gallery = $('#gallery');
     const cardDiv = $('<div class="card"></div>');
     const imgContainer = $('<div class="card-img-container"></div>');
@@ -14,32 +15,85 @@ function createCard(imgUrl, nameTag, fullName, email, cityState) {
     const img = $(`<img class="card-img" src="${imgUrl}" alt="profile picture">`);
     const h3 = $(`<h3 id="${nameTag}" class="card-name cap">${fullName}</h3>`);
     const emailP = $(`<p class="card-text">${email}</p>`);
-    const locationP = $(`<p class="card-text cap">${cityState}</p>`);
+    const locationP = $(`<p class="card-text cap">${city}, ${state}</p>`);
 
     gallery.append(cardDiv);
     cardDiv.append(imgContainer).append(infoContainer);
     imgContainer.append(img);
     infoContainer.append(h3).append(emailP).append(locationP);
+
+    return cardDiv;
+}
+
+/**
+ * Creates the modal window and appends it to the DOM
+ * @param {string} imgUrl 
+ * @param {string} nameTag 
+ * @param {string} fullName 
+ * @param {string} email 
+ * @param {string} phone 
+ * @param {string} street 
+ * @param {string} city 
+ * @param {string} state 
+ * @param {*} postcode - Either a number or a string
+ * @param {string} birthdate 
+ */
+function createModal(imgUrl, nameTag, fullName, email, phone, street, city, state, postcode, birthdate) {
+    const container = $('<div class="modal-container"></div>');
+    const modal = $('<div class="modal"></div>');
+    const x = $('<button type="button" id="modal-close-btn" class="modal-close-btn"><strong>X</strong></button>');
+    const dataContainer = $('<div class="modal-info-container"></div>');
+    const img = $(`<img class="modal-img" src="${imgUrl}" alt="profile picture">`);
+    const h3 = $(`<h3 id="${nameTag}-modal" class="modal-name cap">${fullName}</h3>`);
+    const emailP = $(`<p class="modal-text">${email}</p>`);
+    const cityP = $(`<p class="modal-text cap">${city}</p>`);
+    const hr = $('<hr>');
+    const phoneP = $(`<p class="modal-text">${phone}</p>`);
+    const addressP = $(`<p class="modal-text cap">${street}, ${city}, ${state} ${postcode}</p>`);
+    const birthdateP = $(`<p class="modal-text">Birthday: ${birthdate}</p>`);
+    const navContainer = $('<div class="modal-btn-container"></div>');
+    const prevButton = $('<button type="button" id="modal-prev" class="modal-prev btn">Prev</button>');
+    const nextButton = $('<button type="button" id="modal-next" class="modal-next btn">Next</button>');
+    
+    $('body').append(container);
+    container.append(modal);
+    modal.append(x).append(dataContainer).append(navContainer);
+    dataContainer
+        .append(img).append(h3).append(emailP).append(cityP)
+        .append(hr).append(phoneP).append(addressP).append(birthdateP);
+    navContainer.append(prevButton).append(nextButton);
+
+    // close the window
+    x.click(() => container.hide());
 }
 
 /**
  * Callback function for the GET request to handle the user data
  * @param {object} userData - Data returned from the Random User API
  */
-let users;
 function generator(userData) {
-    users = userData.results;
+    const users = userData.results;
     users.forEach(user => {
-        // console.log(user);
+        console.log(user.cell);
 
-        const img = user.picture.thumbnail;
+        const img = user.picture.large;
         const firstName = user.name.first;
         const lastName = user.name.last;
         const nameTag = `${firstName}-${lastName}`;
         const fullName = `${firstName} ${lastName}`;
-        const cityState = `${user.location.city}, ${abbrState(user.location.state)}`;
+        const email = user.email;
+        const phone = user.cell;
+        const street = user.location.street;
+        const city = user.location.city;
+        const state = abbrState(user.location.state);
+        const postcode = user.location.postcode;
+        const birthdate = formatDate(user.dob.date);
 
-        createCard(img, nameTag, fullName, user.email, cityState);
+        const card = createCard(img, nameTag, fullName, email, city, state);
+
+        card.click(() => {
+            createModal(img, nameTag, fullName, email, phone, street, city, state, postcode, birthdate);
+        });
     })
 }
 
@@ -56,6 +110,15 @@ function abbrState(stateName) {
         }
     })
     return abbr;
+}
+
+function formatDate(date) {
+    const newDate = new Date(date);
+    const month = newDate.getMonth() + 1;
+    const day = newDate.getDate();
+    const year = newDate.getFullYear();
+
+    return `${month}/${day}/${year}`;
 }
 
 // get data
