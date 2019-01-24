@@ -8,7 +8,7 @@
  * @param {string} state
  */
 function createCard(imgUrl, nameTag, fullName, email, city, state) {
-    const cardDiv = $('<div class="card"></div>');
+    const cardDiv = $(`<div id="${nameTag}-card" class="card"></div>`);
     const imgContainer = $('<div class="card-img-container"></div>');
     const infoContainer = $('<div class="card-info-container"></div>');
     const img = $(`<img class="card-img" src="${imgUrl}" alt="profile picture">`);
@@ -65,6 +65,26 @@ function createModal(imgUrl, nameTag, fullName, email, phone, street, city, stat
     // close the window
     x.click(() => container.hide());
     $(document).keydown(e => {if (e.key === 'Escape') container.hide()});
+
+    // previous user
+    const prevUser = $(`#${nameTag}-card`).prev();
+    if (prevUser.length === 0) {
+        disableButton(prevButton);
+    }
+    prevButton.click(() => {
+        container.hide();
+        prevUser.click();
+    })
+
+    // next user
+    const nextUser = $(`#${nameTag}-card`).next();
+    if (nextUser.length === 0) {
+        disableButton(nextButton);
+    }
+    nextButton.click(() => {
+        container.hide();
+        nextUser.click();
+    })
 }
 
 /**
@@ -72,8 +92,7 @@ function createModal(imgUrl, nameTag, fullName, email, phone, street, city, stat
  * @param {object} userData - Data returned from the Random User API
  */
 function generator(userData) {
-    const users = userData.results;
-    users.forEach(user => {
+    userData.results.forEach(user => {
         const img = user.picture.large;
         const firstName = user.name.first;
         const lastName = user.name.last;
@@ -132,6 +151,11 @@ function formatPhone(phone) {
     const regex = /^\(?(\d{3})\)?-(\d{3})-(\d{4})$/;
     const newPhone = phone.replace(regex, '($1) $2-$3');
     return newPhone;
+}
+
+function disableButton(button) {
+    button.prop('disabled', true);
+    button.addClass('disable');
 }
 
 // get data

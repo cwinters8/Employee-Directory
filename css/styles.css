@@ -205,8 +205,12 @@ header h1 {
     border-radius: 0.35em;
     transition: .4s ease-out;
     outline: none;
-  }
-  
+}
+
+.disable {
+    cursor: default!important;
+    background: grey!important;
+}
 
 /* ===================================== 
    Media Queries
@@ -259,5 +263,8 @@ header h1 {
     .btn:hover {
         background: rgba(255, 255, 255, 1);
         color: rgba(25, 25, 25, 1); 
+    }
+    .disable:hover {
+        color: rgba(255, 255, 255, 0.9)!important;
     }
 }
