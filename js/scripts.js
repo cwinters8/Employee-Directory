@@ -124,6 +124,10 @@ function formatDate(date) {
     return `${month}/${day}/${year}`;
 }
 
+/**
+ * Standardizes the format of phone numbers
+ * @param {string} phone 
+ */
 function formatPhone(phone) {
     const regex = /^\(?(\d{3})\)?-(\d{3})-(\d{4})$/;
     const newPhone = phone.replace(regex, '($1) $2-$3');
