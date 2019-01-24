@@ -1,3 +1,15 @@
+function searchBox() {
+    const form = $('<form action="#" method="get"></form');
+    const search = $('<input type="search" id="search-input" class="search-input" placeholder="Search...">');
+    const submit = $('<input type="submit" value="&#x1F50D;" id="search-submit" class="search-submit">');
+
+    $('.search-container').append(form);
+    form.append(search).append(submit);
+
+    return search;
+}
+const search = searchBox();
+
 /**
  * Creates the user's card from the supplied data and attaches it to the DOM
  * @param {string} imgUrl 
@@ -153,6 +165,10 @@ function formatPhone(phone) {
     return newPhone;
 }
 
+/**
+ * Disables the specified button
+ * @param {element} button - button selected with jQuery
+ */
 function disableButton(button) {
     button.prop('disabled', true);
     button.addClass('disable');
@@ -160,3 +176,19 @@ function disableButton(button) {
 
 // get data
 $.getJSON('https://randomuser.me/api/?exc=login,registered,nat,gender,phone&nat=us,ca&results=12', generator);
+
+// filter results
+search.on('input', e => {
+    const cards = $('.card');
+    const searchTerm = e.target.value.toLowerCase();
+    cards.each((index, card) => {
+        const regex = /^(\w*)\-(\w*)\-card/;
+        const id = $(card).attr('id');
+        const name = id.replace(regex, '$1 $2');
+        if (name.includes(searchTerm)) {
+            $(`#${id}`).show();
+        } else {
+            $(`#${id}`).hide();
+        }
+    });
+});
