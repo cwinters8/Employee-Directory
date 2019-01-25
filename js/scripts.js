@@ -101,6 +101,19 @@ function createModal(imgUrl, nameTag, fullName, email, phone, street, city, stat
         container.hide();
         nextUser.click();
     })
+
+    // use arrow keys to navigate between users
+    $(document).keydown(e => {
+        if (container.is(':visible')) {
+            if (e.key === 'ArrowLeft' && prevButton.is(':enabled')) {
+                container.hide();
+                prevUser.click();
+            } else if (e.key === 'ArrowRight' && nextButton.is(':enabled')) {
+                container.hide();
+                nextUser.click();
+            }
+        }
+    });
 }
 
 /**
