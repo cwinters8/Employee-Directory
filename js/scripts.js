@@ -1,3 +1,7 @@
+/**
+ * Creates a search box
+ * @returns search input element
+ */
 function searchBox() {
     const form = $('<form action="#" method="get"></form');
     const search = $('<input type="search" id="search-input" class="search-input" placeholder="Search...">');
