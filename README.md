@@ -9,6 +9,9 @@ JavaScript
 jQuery  
 AJAX  
 
+## Future improvements
+- Modals displayed from search results should only be able to navigate between the results, and not all the employees.
+
 ## Style Changes
 - Changed background color
 - Changed color of header text
