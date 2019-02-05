@@ -12,4 +12,4 @@ CSS
 - Modals displayed from search results should only be able to navigate between the results, and not all the employees.
 
 ## Credits
-The HTML and the majority of the CSS were provided by [Team Treehouse](https://teamtreehouse.com).
+The majority of the HTML and CSS were provided by [Team Treehouse](https://teamtreehouse.com).
