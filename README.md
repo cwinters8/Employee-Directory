@@ -1,5 +1,5 @@
 # Employee Directory
-A mock employee directory for "Awesome Startup". The employee data was generated using the [Random User Generator API](https://randomuser.me/).
+A mock employee directory for "Awesome Startup". The employee data is generated using the [Random User Generator API](https://randomuser.me/).
 
 ## Technologies Used
 JavaScript  
