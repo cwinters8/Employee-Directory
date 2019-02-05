@@ -1,6 +1,8 @@
 # Employee Directory
 A mock employee directory for "Awesome Startup". The employee data is generated using the [Random User Generator API](https://randomuser.me/).
 
+Fifth project in the [Team Treehouse](http://referrals.trhou.se/clarkwinters) Full Stack JavaScript Techdegree.
+
 ## Technologies Used
 JavaScript  
 jQuery  
